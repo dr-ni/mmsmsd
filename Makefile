@@ -2,16 +2,19 @@ INSTALL?=install
 RM?=rm -f
 RMD?=$(RM) -r
 PREFIX?=/usr/local
-VARS?=/var/mmsmsd
+VAR?=/var/mmsmsd
 BIN=bin
 IN=inbox
 OUT=sent
 DOCS=/usr/share/doc/mmsmsd
 MANS=man/man1
-
+all:
+	@echo "usage:"
+	@echo "  sudo make install"
+	@echo "  sudo make uninstall"
 install:
-	$(INSTALL) -d $(VARS)/$(IN)
-	$(INSTALL) -d $(VARS)/$(OUT)
+	$(INSTALL) -m 0777 -d $(VAR)/$(IN)
+	$(INSTALL) -m 0777 -d $(VAR)/$(OUT)
 	$(INSTALL) -d $(PREFIX)/$(MANS)
 	$(INSTALL) -m 0755 mmsmsd $(PREFIX)/$(BIN)
 	$(INSTALL) -m 0644 README.md $(DOCS)

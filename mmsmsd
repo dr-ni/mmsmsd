@@ -1,6 +1,39 @@
 #!/bin/sh
-
+PERIOD=30
+INBOX="/var/mmsmsd/inbox"
+SENT="/var/mmsmsd/sent"
 while true; do
-  mmcli -m 0 --messaging-list-sms
-  sleep 10
+  mmcli -m 0 --messaging-list-sms | grep "(sent)" |
+  while read -r line
+  do
+    TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S_%N`
+    SMS_ID=$(echo "$line" | awk -F '/' '{print $6}' | awk -F ' ' '{print $1}')
+    SMS=$(mmcli -s $SMS_ID)
+    echo "$SMS" > $SENT/$TIMESTAMP
+    echo "copying sms $SMS_ID to $SENT/$TIMESTAMP"
+    if [ $? -ne 0 ]; then
+      :
+      #echo "Error: cannot write $INBOX/$TIMESTAMP"
+    else
+      chmod 666 $SENT/$TIMESTAMP
+      mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
+    fi
+  done
+  mmcli -m 0 --messaging-list-sms | grep "(received)" |
+  while read -r line
+  do
+    TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S_%N`
+    SMS_ID=$(echo "$line" | awk -F '/' '{print $6}' | awk -F ' ' '{print $1}')
+    SMS=$(mmcli -s $SMS_ID)
+    echo "$SMS" > $INBOX/$TIMESTAMP
+    echo "copying sms $SMS_ID to $INBOX/$TIMESTAMP"
+    if [ $? -ne 0 ]; then
+      :
+      #echo "Error: cannot write $INBOX/$TIMESTAMP"
+    else
+      chmod 666 $INBOX/$TIMESTAMP
+      mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
+    fi
+  done
+  sleep $PERIOD
 done
