@@ -1,0 +1,6 @@
+#!/bin/sh
+
+while true; do
+  mmcli -m 0 --messaging-list-sms
+  sleep 10
+done
