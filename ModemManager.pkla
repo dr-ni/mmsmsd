@@ -1,0 +1,7 @@
+[ModemManager]
+Identity=unix-user:*
+Action=org.freedesktop.ModemManager1.*
+ResultAny=yes
+ResultActive=yes
+ResultInactive=yes
+
