@@ -1,7 +1,10 @@
 #!/bin/sh
 PERIOD=30
-INBOX="/var/mmsmsd/inbox"
-SENT="/var/mmsmsd/sent"
+SENT=~/.mmsmsd/sent
+INBOX=~/.mmsmsd/inbox
+mkdir ~/.mmsmsd
+mkdir ~/.mmsmsd/inbox
+mkdir ~/.mmsmsd/sent
 while true; do
   mmcli -m 0 --messaging-list-sms | grep "(sent)" |
   while read -r line
@@ -15,7 +18,7 @@ while true; do
       :
       #echo "Error: cannot write $INBOX/$TIMESTAMP"
     else
-      chmod 666 $SENT/$TIMESTAMP
+      #chmod 666 $SENT/$TIMESTAMP
       mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
     fi
   done
@@ -31,7 +34,8 @@ while true; do
       :
       #echo "Error: cannot write $INBOX/$TIMESTAMP"
     else
-      chmod 666 $INBOX/$TIMESTAMP
+      #chmod 666 $INBOX/$TIMESTAMP
+      ogg123 /usr/share/sounds/mate/default/alerts/sonar.ogg
       mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
     fi
   done
