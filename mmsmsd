@@ -35,6 +35,9 @@ while true; do
       #echo "Error: cannot write $INBOX/$TIMESTAMP"
     else
       #chmod 666 $INBOX/$TIMESTAMP
+      #zenity --notification --text "SMS: $TIMESTAMP"
+      notify-send -t 0 "SMS: $TIMESTAMP"
+      #kdialog --title "Long process completed!" --passivepopup "This popup will disappear in 5 seconds" 5 &
       ogg123 /usr/share/sounds/mate/default/alerts/sonar.ogg
       mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
     fi
