@@ -28,6 +28,8 @@ while true; do
     TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S_%N`
     SMS_ID=$(echo "$line" | awk -F '/' '{print $6}' | awk -F ' ' '{print $1}')
     SMS=$(mmcli -s $SMS_ID)
+    NUM=$(echo "$SMS" | awk -F"    number: " '/    number: /{print $2}')
+    TEXT=$(echo "$SMS" | awk -F"      text: " '/      text: /{print $2}')
     echo "$SMS" > $INBOX/$TIMESTAMP
     echo "copying sms $SMS_ID to $INBOX/$TIMESTAMP"
     if [ $? -ne 0 ]; then
@@ -36,7 +38,7 @@ while true; do
     else
       #chmod 666 $INBOX/$TIMESTAMP
       #zenity --notification --text "SMS: $TIMESTAMP"
-      notify-send -t 0 "SMS: $TIMESTAMP"
+      notify-send -t 0 "$NUM $TEXT"
       #kdialog --title "Long process completed!" --passivepopup "This popup will disappear in 5 seconds" 5 &
       ogg123 /usr/share/sounds/mate/default/alerts/sonar.ogg
       mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
