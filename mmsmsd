@@ -2,10 +2,29 @@
 PERIOD=30
 SENT=~/.mmsmsd/sent
 INBOX=~/.mmsmsd/inbox
+UNKNOWN=~/.mmsmsd/unknown
 mkdir ~/.mmsmsd
 mkdir ~/.mmsmsd/inbox
 mkdir ~/.mmsmsd/sent
+mkdir ~/.mmsmsd/unknown
 while true; do
+  mmcli -m 0 --messaging-list-sms | grep "(unknown)" |
+  while read -r line
+  do
+    TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S_%N`
+    SMS_ID=$(echo "$line" | awk -F '/' '{print $6}' | awk -F ' ' '{print $1}')
+    SMS=$(mmcli -s $SMS_ID)
+    echo "$SMS" > $UNKNOWN/$TIMESTAMP
+    echo "copying sms $SMS_ID to $UNKNOWN/$TIMESTAMP"
+    if [ $? -ne 0 ]; then
+      :
+      #echo "Error: cannot write $UNKNOWN/$TIMESTAMP"
+    else
+      #chmod 666 $SENT/$TIMESTAMP
+      mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
+      notify-send -u normal -t 0 "Error unknown SMS"
+    fi
+  done
   mmcli -m 0 --messaging-list-sms | grep "(sent)" |
   while read -r line
   do
@@ -38,7 +57,7 @@ while true; do
     else
       #chmod 666 $INBOX/$TIMESTAMP
       #zenity --notification --text "SMS: $TIMESTAMP"
-      notify-send -t 0 "$NUM $TEXT"
+      notify-send -u normal -t 0 "SMS from $NUM $(printf ":\r")$TEXT"
       #kdialog --title "Long process completed!" --passivepopup "This popup will disappear in 5 seconds" 5 &
       ogg123 /usr/share/sounds/mate/default/alerts/sonar.ogg
       mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
