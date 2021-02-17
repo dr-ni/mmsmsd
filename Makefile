@@ -13,6 +13,9 @@ all:
 	@echo "  sudo make uninstall"
 
 install:
+	sudo apt install modemmanager
+	sudo apt install libnotify-bin
+	sudo apt install vorbis-tools
 	$(INSTALL) -d $(PREFIX)/$(MANS)
 	$(INSTALL) -m 0755 mmsmsd $(PREFIX)/$(BIN)
 	$(INSTALL) -m 0755 mmsendsms $(PREFIX)/$(BIN)
