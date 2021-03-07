@@ -3,16 +3,24 @@ PERIOD=30
 SENT=~/.mmsmsd/sent
 INBOX=~/.mmsmsd/inbox
 UNKNOWN=~/.mmsmsd/unknown
+MODEM=$1
+
+# option check
+if [ $# -lt 2 ]
+then
+  echo "usage: $0 <modem number>"
+  exit 1
+fi
 mkdir ~/.mmsmsd
 mkdir ~/.mmsmsd/inbox
 mkdir ~/.mmsmsd/sent
 mkdir ~/.mmsmsd/unknown
 while true; do
-  mmcli -m 0 --messaging-list-sms | grep "(unknown)" |
+  mmcli -m $MODEM --messaging-list-sms | grep "(unknown)" |
   while read -r line
   do
     TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S_%N`
-    SMS_ID=$(echo "$line" | awk -F '/' '{print $6}' | awk -F ' ' '{print $1}')
+    SMS_ID=$(echo "$line" | awk -F '/' '{print $6}' | awk -F ' ' '{print $MODEM}')
     SMS=$(mmcli -s $SMS_ID)
     echo "$SMS" > $UNKNOWN/$TIMESTAMP
     echo "copying sms $SMS_ID to $UNKNOWN/$TIMESTAMP"
@@ -21,15 +29,15 @@ while true; do
       #echo "Error: cannot write $UNKNOWN/$TIMESTAMP"
     else
       #chmod 666 $SENT/$TIMESTAMP
-      mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
+      mmcli -m $MODEM --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
       notify-send -u normal -t 0 "Error unknown SMS"
     fi
   done
-  mmcli -m 0 --messaging-list-sms | grep "(sent)" |
+  mmcli -m $MODEM --messaging-list-sms | grep "(sent)" |
   while read -r line
   do
     TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S_%N`
-    SMS_ID=$(echo "$line" | awk -F '/' '{print $6}' | awk -F ' ' '{print $1}')
+    SMS_ID=$(echo "$line" | awk -F '/' '{print $6}' | awk -F ' ' '{print $MODEM}')
     SMS=$(mmcli -s $SMS_ID)
     echo "$SMS" > $SENT/$TIMESTAMP
     echo "copying sms $SMS_ID to $SENT/$TIMESTAMP"
@@ -38,10 +46,10 @@ while true; do
       #echo "Error: cannot write $INBOX/$TIMESTAMP"
     else
       #chmod 666 $SENT/$TIMESTAMP
-      mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
+      mmcli -m $MODEM --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
     fi
   done
-  mmcli -m 0 --messaging-list-sms | grep "(received)" |
+  mmcli -m $MODEM --messaging-list-sms | grep "(received)" |
   while read -r line
   do
     TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S_%N`
@@ -60,7 +68,7 @@ while true; do
       notify-send -u normal -t 0 "SMS from $NUM $(printf ":\r")$TEXT"
       #kdialog --title "Long process completed!" --passivepopup "This popup will disappear in 5 seconds" 5 &
       ogg123 /usr/share/sounds/mate/default/alerts/sonar.ogg
-      mmcli -m 0 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
+      mmcli -m $1 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
     fi
   done
   sleep $PERIOD
