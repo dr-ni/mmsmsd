@@ -6,7 +6,7 @@ UNKNOWN=~/.mmsmsd/unknown
 MODEM=$1
 
 # option check
-if [ $# -lt 2 ]
+if [ $# -lt 1 ]
 then
   echo "usage: $0 <modem number>"
   exit 1

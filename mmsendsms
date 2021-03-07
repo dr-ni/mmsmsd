@@ -1,13 +1,14 @@
 #!/bin/sh
 # option check
-if [ $# -lt 2 ]
+if [ $# -lt 3 ]
 then
-  echo "usage: $0 <phone number> <text>"
+  echo "usage: $0 <modem number> <phone number> <text>"
   exit 1
 fi
-NUMBER=$1
-TEXT=$2
-RET_TEXT=$(mmcli -m 0 --messaging-create-sms="text='$TEXT',number='$NUMBER'")
+MODEM=$1
+NUMBER=$2
+TEXT=$3
+RET_TEXT=$(mmcli -m $MODEM --messaging-create-sms="text='$TEXT',number='$NUMBER'")
 SMS_ID=$(echo "$RET_TEXT" | awk -F '/' '{print $6}' | awk -F ' ' '{print $1}')
 #echo $RET_TEXT
 #echo $SMS_ID
