@@ -22,9 +22,12 @@ install:
 	$(INSTALL) -m 0644 README.md $(DOCS)
 	$(INSTALL) -m 0644 LICENSE $(DOCS)
 	$(INSTALL) -m 0644 $(MANS)/mmsmsd.1 $(PREFIX)/$(MANS)
+	$(INSTALL) -m 0644 $(MANS)/mmsendsms.1 $(PREFIX)/$(MANS)
 	$(CP) ModemManager.pkla $(RULES)
 
 uninstall:
 	$(RM) $(PREFIX)/$(BIN)/mmsmsd
+	$(RM) $(PREFIX)/$(BIN)/mmsendsms
 	$(RMD) $(DOCS)
 	$(RM) $(PREFIX)/$(MANS)/mmsmsd.1
+	$(RM) $(PREFIX)/$(MANS)/mmsendsms.1

@@ -1,0 +1,42 @@
+.TH "mmsmsd" 1 0.0.1 "07 Mar 2021" "User Manual"
+
+.SH NAME
+mmsmsd
+
+.SH DESCRIPTION
+This is a simple SMS deamon for modemmanager. The deamon handles incomming and outgoing SMS. All SMS are stored in ~/.mmsmsd. The deamon has to be started as local user process eg. over modem 0: "mmsmsd 0 &". Never run two deamons on the same modem. You can list your modems like this: "mmcli -L".
+
+
+.SH SYNOPSIS
+mmsmsd [modem number] &
+
+
+.SH FILES
+.TP
+All SMS are stored in ~/.mmsmsd
+
+.SH COPYRIGHT
+mmsmsd:
+
+Copyright (c) 2021 U. Niethammer
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
+.SH SEE ALSO
+ mmsendsms(1)
+
+.SH CONTACT
+ Website: https://github.com/dr-ni/mmsmsd
+
