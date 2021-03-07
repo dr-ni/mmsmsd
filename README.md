@@ -30,7 +30,7 @@ mmsmsd & > /dev/null 2>&1
 
 Send SMS:
 ```sh
-mmsendsms >phone number> "<your text message"
+mmsendsms <phone number> "<your text message>"
 ```
 
 https://github.com/dr-ni/mmsmsd
