@@ -21,12 +21,12 @@ sudo make uninstall
 ## Use
 Start deamon in background:
 ```sh
-mmsmsd <modem number> &
+mmsmsd [modem number] &
 ```
 
 Send SMS:
 ```sh
-mmsendsms <modem number> <phone number> <your text message>
+mmsendsms [modem number] [phone number] [your text message]
 ```
 
 https://github.com/dr-ni/mmsmsd
