@@ -65,7 +65,7 @@ while true; do
     else
       #chmod 666 $INBOX/$TIMESTAMP
       #zenity --notification --text "SMS: $TIMESTAMP"
-      notify-send -u normal -t 0 "SMS from $NUM" "$(printf ":\r")$TEXT"
+      notify-send -u normal -t 0 "SMS from $NUM" "$(printf ":\n")$TEXT"
       #kdialog --title "Long process completed!" --passivepopup "This popup will disappear in 5 seconds" 5 &
       ogg123 /usr/share/sounds/mate/default/alerts/sonar.ogg
       mmcli -m $1 --messaging-delete-sms=/org/freedesktop/ModemManager1/SMS/$SMS_ID
